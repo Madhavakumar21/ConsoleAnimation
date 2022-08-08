@@ -112,11 +112,11 @@ int update_rain()
 				//needs_locations[needs_locations_size] = j;
 				needs_locations_size++;
 			}
-			if((g_rain_current_str[i][j] == RAIN_BACKGROUND) && (g_rain_current_str[i - 1][j] != RAIN_BACKGROUND) && (rain_current_needs[j] != '\0'))
+			if((g_rain_current_str[i][j] == RAIN_BACKGROUND) && (g_rain_current_str[i - 1][j] != RAIN_BACKGROUND) && (rain_current_needs[j] == g_rain_current_str[i - 1][j]))
 			{
 				g_rain_current_str[i][j] = g_rain_current_str[i - 1][j];
 				g_rain_current_str[i - 1][j] = RAIN_BACKGROUND;
-				rain_current_needs[j] = '\0';
+				rain_current_needs[j] = 127;   // Need is being vanquished
 				needs_locations_size--;
 			}
 		}
@@ -144,7 +144,7 @@ int update_rain()
 	k = 0;
 	for(int j = 0; j < needs_locations_size; j++)
 	{
-		while(!rain_current_needs[k]) k++;
+		while((rain_current_needs[k] == '\0') || (rain_current_needs[k] == 127)) k++;
 
 		needs_locations[j] = k;
 		k++;
@@ -165,7 +165,7 @@ int update_rain()
 			needs_locations_size--;
 
 			g_rain_current_str[0][need_ind] = rain_current_needs[need_ind];
-			//rain_current_needs[need_ind] = '\0';
+			rain_current_needs[need_ind] = 127;
 		}
 	}
 
